@@ -51,6 +51,7 @@ class JcrNodesWriter implements ItemWriter<ProtoNode>, ItemWriteListener {
             [ pNode.name , pNode.mandatoryChildNodeList.collect { it.name - pNode.name }]
         }.flatten()}"""
         theSession().save()
+        log.info "Last saved node: ${((ProtoNode)(nodeProtos.get(nodeProtos.size() - 1))).name}"
         withStopWatch("Refreshing session: ${theSession()}") {
             theSession().refresh(false)
         }
