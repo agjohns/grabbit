@@ -236,6 +236,9 @@ class JCRNodeDecorator {
         return primaryType == 'rep:User' || primaryType == 'rep:Group'
     }
 
+    boolean isRepCUGType() {
+        return primaryType == 'rep:CugPolicy'
+    }
 
     boolean isLoginToken() {
         final primaryType = getPrimaryType()

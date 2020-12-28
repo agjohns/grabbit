@@ -60,7 +60,7 @@ class JcrPropertyDecorator {
             return true
         }
 
-        if(nodeOwner.isAuthorizableType() || nodeOwner.isACType()) {
+        if(nodeOwner.isAuthorizableType() || nodeOwner.isACType() || nodeOwner.isRepCUGType()) {
             return true
         }
 

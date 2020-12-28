@@ -95,6 +95,10 @@ class ProtoPropertyDecorator {
         innerProtoProperty.name == REP_PRINCIPAL_NAME
     }
 
+    boolean isPrincipalNames() {
+        innerProtoProperty.name == "rep:principalNames"
+    }
+
 
     boolean isPrivilege() {
         innerProtoProperty.name == REP_PRIVILEGES
@@ -118,6 +122,11 @@ class ProtoPropertyDecorator {
 
     boolean isRepAclType() {
         isPrimaryType() && (getStringValue() ==  NT_REP_ACL)
+    }
+
+
+    boolean isRepCugPolicyType() {
+        isPrimaryType() && (getStringValue() == 'rep:CugPolicy')
     }
 
 

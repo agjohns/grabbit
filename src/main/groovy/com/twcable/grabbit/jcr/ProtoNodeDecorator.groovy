@@ -44,6 +44,9 @@ abstract class ProtoNodeDecorator {
         else if(primaryType.isRepAclType()) {
             return new ACLProtoNodeDecorator(node, protoProperties, nameOverride)
         }
+        else if (primaryType.isRepCugPolicyType()) {
+            return new CUGProtoNodeDecorator(node, protoProperties)
+        }
         return new DefaultProtoNodeDecorator(node, protoProperties, nameOverride)
     }
 
