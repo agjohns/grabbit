@@ -8,6 +8,7 @@ for Grabbit to work. If running the deserialization firewall with custom blackli
 
 == Below details AEM version support for the various releases of Grabbit.
 ```
+   v8.x - AEM 6.4 and AEM 6.5
    v7.x - AEM 6.1 and AEM 6.2 and AEM 6.3
    v5.x - AEM 6.1
    v4.x - AEM 6.1

@@ -73,10 +73,11 @@ Here is an example `JSON` configuration file that could be used for configuring 
                 ],
             "workflowConfigIds" :
                 [
-                    "/etc/workflow/launcher/config/update_asset_mod",
-                    "/etc/workflow/launcher/config/update_asset_create",
-                    "/etc/workflow/launcher/config/dam_xmp_nested_writeback",
-                    "/etc/workflow/launcher/config/dam_xmp_writeback"
+                    "/conf/global/settings/workflow/launcher/config/dam_xmp_writeback",
+                    "/conf/global/settings/workflow/launcher/config/update_asset_create",
+                    "/conf/global/settings/workflow/launcher/config/update_asset_create_without_DM",
+                    "/conf/global/settings/workflow/launcher/config/update_asset_mod",
+                    "/conf/global/settings/workflow/launcher/config/update_asset_mod_without_DM"
                 ],
             "deltaContent" : false
         }
@@ -98,10 +99,11 @@ The corresponding `YAML` configuration for the JSON above will look something li
    # A reference to the standard set of workflow configuration ids that
    # we want to turn off when working with DAM assets.
    &damWorkflows:
-     - /etc/workflow/launcher/config/update_asset_mod
-     - /etc/workflow/launcher/config/update_asset_create
-     - /etc/workflow/launcher/config/dam_xmp_nested_writeback
-     - /etc/workflow/launcher/config/dam_xmp_writeback
+     - /conf/global/settings/workflow/launcher/config/dam_xmp_writeback
+     - /conf/global/settings/workflow/launcher/config/update_asset_create
+     - /conf/global/settings/workflow/launcher/config/update_asset_create_without_DM
+     - /conf/global/settings/workflow/launcher/config/update_asset_mod
+     - /conf/global/settings/workflow/launcher/config/update_asset_mod_without_DM
 
 
    # Each of the paths to include in the copy
@@ -179,6 +181,50 @@ Invalid:
            "./someOtherContent/pdfs"
        ]
    }
+```
+
+===== Disabling Workflows
+
+Workflow Config IDs allow the user to specify a set of workflows to disable before grabbing content. By default, and on most AEM installations, there are numerous workflows that execute for creates and updates of assets under the ```/content/dam``` path. 
+Since Grabbit will likely be syncing assets to the client instance, it is *extremely important* that you disable these workflows during the sync activity. These unnecessary workflow executions can significantly slow the AEM server down, and in extreme 
+situations can even crash the AEM server. Below are some possible candidates that may need to be disabled, but there could be others as well:
+
+DAM MetaData Writeback:
+```
+/conf/global/settings/workflow/launcher/config/dam_xmp_writeback
+```
+
+DAM Update Asset:
+```
+/conf/global/settings/workflow/launcher/config/update_asset_create
+/conf/global/settings/workflow/launcher/config/update_asset_create_without_DM
+/conf/global/settings/workflow/launcher/config/update_asset_mod
+/conf/global/settings/workflow/launcher/config/update_asset_mod_without_DM
+/conf/global/settings/workflow/launcher/config/update_asset_mod_without_DM_reupload
+```
+
+DAM Process Sub-Asset:
+```
+/conf/global/settings/workflow/launcher/config/process_subasset_create
+/conf/global/settings/workflow/launcher/config/process_subasset_mod
+```
+
+DAM Parse Word Documents:
+```
+/conf/global/settings/workflow/launcher/config/parse_word_doc_create
+/conf/global/settings/workflow/launcher/config/parse_word_doc_mod
+/conf/global/settings/workflow/launcher/config/parse_word_docx_create
+/conf/global/settings/workflow/launcher/config/parse_word_docx_mod
+```
+
+If you experience an *InvalidItemStateException* (like the one below) during a sync, it's likely a workflow was triggered and is trying to modify a node at the same time
+as Grabbit. Look in the logs for any running workflow instances during the sync to identify additional ones that may need to be disabled.
+```
+javax.jcr.InvalidItemStateException: OakState0001: Unresolved conflicts in /content/dam/someDamContent/my_image.jpeg
+	at org.apache.jackrabbit.oak.api.CommitFailedException.asRepositoryException(CommitFailedException.java:238) [org.apache.jackrabbit.oak-api:1.22.4]
+	at org.apache.jackrabbit.oak.api.CommitFailedException.asRepositoryException(CommitFailedException.java:213) [org.apache.jackrabbit.oak-api:1.22.4]
+	at org.apache.jackrabbit.oak.jcr.delegate.SessionDelegate.newRepositoryException(SessionDelegate.java:669) [org.apache.jackrabbit.oak-jcr:1.22.4]
+...
 ```
 
 === Syncing Users and Groups

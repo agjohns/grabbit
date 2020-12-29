@@ -28,10 +28,11 @@
       ],
       "workflowConfigIds" :
       [
-        "/etc/workflow/launcher/config/update_asset_mod",
-        "/etc/workflow/launcher/config/update_asset_create",
-        "/etc/workflow/launcher/config/dam_xmp_nested_writeback",
-        "/etc/workflow/launcher/config/dam_xmp_writeback"
+        "/conf/global/settings/workflow/launcher/config/dam_xmp_writeback",
+        "/conf/global/settings/workflow/launcher/config/update_asset_create",
+        "/conf/global/settings/workflow/launcher/config/update_asset_create_without_DM",
+        "/conf/global/settings/workflow/launcher/config/update_asset_mod",
+        "/conf/global/settings/workflow/launcher/config/update_asset_mod_without_DM"
       ],
       "deltaContent" : false
     }
