@@ -29,6 +29,8 @@ import javax.jcr.Node
 import javax.jcr.PathNotFoundException
 import javax.jcr.Session
 
+import static org.apache.jackrabbit.oak.spi.security.authorization.accesscontrol.AccessControlConstants.NT_REP_ACL
+
 /**
  * A client preSyncFlow tasklet that deletes nodes under the job path
  * <p>
@@ -164,6 +166,11 @@ class DeleteBeforeWriteTasklet implements Tasklet {
             final currentNode = rootNodeChildren.nextNode()
             //If this node is in our exclusion list, don't delete it
             if(!(nodeAndExcludePaths.find { currentNode.name == it.nodeName })) {
+                //We can't delete policy nodes directly, the parent itself must be deleted
+                if (currentNode.isNodeType(NT_REP_ACL) || currentNode.isNodeType("rep:CugPolicy")) {
+                    log.warn "Cannot delete node directly at ${currentNode.path} because it is protected, it must be deleted via it's parent - Skipping"
+                    continue
+                }
                 currentNode.remove()
             }
         }
