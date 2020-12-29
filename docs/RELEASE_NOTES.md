@@ -2,6 +2,11 @@
 
 [ ![Download](https://api.bintray.com/packages/twcable/aem/Grabbit/images/download.svg) ](https://bintray.com/twcable/aem/Grabbit/_latestVersion)
 
+## 8.0.0
+
+* Added AEM 6.4+ support for disabling workflows
+* Documentation updates
+
 ## 7.1.5
 
 * Bug fixes (Fixes #2)
