@@ -3,6 +3,7 @@
 <properties>
 <comment>FileVault Package Properties</comment>
 <entry key="name">${project.packageName}</entry>
+<entry key="acHandling">merge</entry>
 <entry key="buildCount">1</entry>
 <entry key="version">${version}</entry>
 <entry key="dependencies"/>

@@ -22,13 +22,10 @@ import com.twcable.grabbit.client.batch.workflows.WorkflowManager
 import groovy.transform.CompileStatic
 import groovy.transform.WithWriteLock
 import groovy.util.logging.Slf4j
-import org.apache.felix.scr.annotations.Activate
-import org.apache.felix.scr.annotations.Component
-import org.apache.felix.scr.annotations.Deactivate
-import org.apache.felix.scr.annotations.Reference
-import org.apache.felix.scr.annotations.Service
+import org.apache.felix.scr.annotations.*
 
 import javax.annotation.Nonnull
+import javax.jcr.RepositoryException
 import java.lang.String as WorkflowID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger as JobUseCount
@@ -95,8 +92,13 @@ class DefaultWorkFlowManager implements WorkflowManager {
      */
     private void updateConfig(WorkflowID configId, boolean enable) {
         final ConfigEntry configEntry = workflowLauncher.configEntries.find { it.id == configId }
+        if (configId.startsWith("/libs")) {
+            log.error "Received a config entry for '${configId}' which cannot be modified. Configurations should exist below '/conf/global/settings/workflow'"
+            return
+        }
         if (configEntry == null) {
-            log.error "Was expecting a config entry for ${configId}, but none was found!"
+            log.error "Was expecting a config entry for ${configId}, but none was found! If this configuration does exist, please verify permissions have been " +
+                      "set appropriately for the 'workflow-service' user."
             return
         }
         if (configEntry.enabled == enable) {
@@ -118,6 +120,12 @@ class DefaultWorkFlowManager implements WorkflowManager {
      */
     @WithWriteLock
     private void updateConfig(final WorkflowID configId, final ConfigEntry configEntry) {
-        workflowLauncher.editConfigEntry(configId, configEntry)
+        try {
+            workflowLauncher.editConfigEntry(configId, configEntry)
+        }
+        catch (RepositoryException e) {
+            log.error "Unable to update workflow configuration for id '${configId}'. Please verify permissions have been set appropriately " +
+                      "for the 'workflow-service' user."
+        }
     }
 }

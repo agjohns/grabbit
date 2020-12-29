@@ -46,7 +46,7 @@ class WorkflowOffTasklet implements Tasklet {
 
     @Override
     RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        if (!workflowConfigs || !workflowConfigs.contains("/etc/workflow") /* temporary for testing */) {
+        if (!workflowConfigs) {
             //nothing to process as there are no workflow configs for the current path
             log.info "Nothing to process..."
             return RepeatStatus.FINISHED

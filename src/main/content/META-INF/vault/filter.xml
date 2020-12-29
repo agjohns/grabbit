@@ -5,4 +5,5 @@
 <workspaceFilter vesion="1.0">
     <filter root="/apps/grabbit/config"/>
     <filter root="/apps/grabbit/install"/>
+    <filter root="/conf/global/settings/workflow/rep:policy"/>
 </workspaceFilter>
